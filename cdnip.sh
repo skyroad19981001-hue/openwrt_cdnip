@@ -154,8 +154,8 @@ if [ $(awk -F, 'NR==2 {print $6}' /root/cfipopw/result.csv) == 0.00 ]; then
 awk -F, "NR<=$new_num" /root/cfipopw/result.csv > /root/cfipopw/new_result.csv
 mv /root/cfipopw/new_result.csv /root/cfipopw/result.csv
 fi
-if [[ $(awk -F ',' 'NR==12 {print $1}' /root/cfipopw/result.csv) ]]; then
-awk -F ',' 'NR>1 && NR<=11 {print $1}' /root/cfipopw/result.csv > /root/cfipopw/new_result.csv
+if [[ $(awk -F ',' 'NR==22 {print $1}' /root/cfipopw/result.csv) ]]; then
+awk -F ',' 'NR==1 || (NR>1 && NR<=21)' /root/cfipopw/result.csv > /root/cfipopw/new_result.csv
 mv /root/cfipopw/new_result.csv /root/cfipopw/result.csv
 fi
 sed -i '/api.cloudflare.com/d' /etc/hosts
