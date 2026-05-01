@@ -154,10 +154,7 @@ if [ $(awk -F, 'NR==2 {print $6}' /root/cfipopw/result.csv) == 0.00 ]; then
 awk -F, "NR<=$new_num" /root/cfipopw/result.csv > /root/cfipopw/new_result.csv
 mv /root/cfipopw/new_result.csv /root/cfipopw/result.csv
 fi
-if [[ $(awk -F ',' 'NR==22 {print $1}' /root/cfipopw/result.csv) ]]; then
-awk -F ',' 'NR==1 || (NR>1 && NR<=21)' /root/cfipopw/result.csv > /root/cfipopw/new_result.csv
-mv /root/cfipopw/new_result.csv /root/cfipopw/result.csv
-fi
+
 sed -i '/api.cloudflare.com/d' /etc/hosts
 #goodip=$(awk -F ',' 'NR > 1 {print $1}' /root/cfipopw/result.csv | sed -n 1p)
 #echo "$goodip api.cloudflare.com" >> /etc/hosts
@@ -205,7 +202,7 @@ else
 fi
 csv_file='result.csv'
 if [[ -f $csv_file ]]; then
-    ips=$(awk -F ',' 'NR > 1 {print $1}' "$csv_file")
+    ips=$(awk -F ',' 'NR==1{if($1~/^[0-9]/)print $1; next} NR>1{print $1}' "$csv_file")
     for ip in $ips; do
         url="https://api.cloudflare.com/client/v4/zones/$zone_id/dns_records"
         if [[ "$ip" =~ ":" ]]; then
