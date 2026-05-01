@@ -201,7 +201,7 @@ else
 fi
 csv_file='result.csv'
 if [[ -f $csv_file ]]; then
-    ips=$(awk -F ',' '{print $1}' "$csv_file")
+    ips=$(awk -F ',' '{if(NR==1){if($1!~/^[0-9]+\./)next} {print $1}' "$csv_file")
     for ip in $ips; do
         url="https://api.cloudflare.com/client/v4/zones/$zone_id/dns_records"
         if [[ "$ip" =~ ":" ]]; then
