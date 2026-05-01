@@ -1,7 +1,7 @@
 
 ### 一键脚本
 ```
-curl -ksSL https://gitlab.com/rwkgyg/cdnopw/raw/main/cdnopw.sh -o cdnopw.sh && bash cdnopw.sh
+curl -ksSL https://raw.githubusercontent.com/skyroad19981001-hue/openwrt_cdnip/main/cdnopw.sh -o cdnopw.sh && bash cdnopw.sh
 ```
 ### 进入脚本快捷方式：```bash cdnopw.sh```
 --------------------------------------
