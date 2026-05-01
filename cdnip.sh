@@ -9,7 +9,7 @@ api_key=opcfkey
 pause=true
 clien=9
  
-CFST_URL_R="-url https://е.eu.org/500.zip"
+CFST_URL_R=""
 
 CFST_N=200
 
@@ -26,13 +26,13 @@ CFST_SL=0
 telegramBotToken=optgken
 telegramBotUserId=optgid
 
-CFST_SPD=""
+CFST_SPD=-dd
 ymorip=1
 domain=opymyj
 subdomain=opymmc
 ymoryms=1
 token=
-sleepTime=25
+sleepTime=26
 tgapi=api.telegram.org
 
 tgaction(){
@@ -89,7 +89,7 @@ for ((i=1; i<=$max_retries; i++)); do
         exit
     else
         echo "Cloudflare账号登陆失败，尝试重连 ($i/$max_retries)..."
-        sed -i '/api.cloudflare.com/d' /etc/hosts
+	sed -i '/api.cloudflare.com/d' /etc/hosts
         echo -e "104.18.12.137 api.cloudflare.com\n104.16.160.55 api.cloudflare.com\n104.16.96.55 api.cloudflare.com" >> /etc/hosts
         sleep 2
     fi
@@ -143,7 +143,7 @@ fi
 if [ -f "/root/cfipopw/result.csv" ]; then
 second_line=$(sed -n '2p' /root/cfipopw/result.csv | tr -d '[:space:]')
 if [ -z "$second_line" ]; then
-echo "优选IP失败，请尝试更换端口或者重新执行一次" && sleep 3
+echo "优选IP失败，请尝试更换端口或者重新执行一次" && sleep 1
 pushmessage="优选IP失败，请尝试更换端口或者重新执行一次"
 tgaction
 exit
@@ -166,13 +166,13 @@ fi
 
 echo "测速完毕";
 if [ "$pause" = "false" ] ; then
-                echo "按要求未重启科学上网服务";
-                sleep 3;
+		echo "按要求未重启科学上网服务";
+		sleep 3;
 else
-                /etc/init.d/$CLIEN restart;
-                echo "已重启$CLIEN";
-                echo "请稍等$sleepTime秒";
-                sleep $sleepTime;
+		/etc/init.d/$CLIEN restart;
+		echo "已重启$CLIEN";
+		echo "请稍等$sleepTime秒";
+		sleep $sleepTime;
 fi
 
 ymonly(){
@@ -213,7 +213,7 @@ if [[ -f $csv_file ]]; then
             "type": "'"$record_type"'",
             "name": "'"$subdomain.$domain"'",
             "content": "'"$ip"'",
-            "ttl": 60,
+	    "ttl": 60,
             "proxied": false
         }'
         response=$(curl -s -X POST "$url" -H "X-Auth-Email: $x_email" -H "X-Auth-Key: $api_key" -H "Content-Type: application/json" -d "$data")
@@ -224,7 +224,7 @@ if [[ -f $csv_file ]]; then
             echo "导入IP地址 $ip 失败"
             echo "导入IP地址 $ip 失败" >> informlog
         fi
-        sleep 1
+        sleep 3
        done
 else
     echo "CSV文件 $csv_file 不存在"
@@ -290,3 +290,4 @@ echo
 echo "切记：在软路由-计划任务选项中，加入优选IP自动执行时间的cron表达式"
 echo "比如每天早上三点执行：0 3 * * * cd /root/cfipopw/ && bash cdnip.sh"
 echo
+exit
