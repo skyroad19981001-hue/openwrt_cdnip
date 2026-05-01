@@ -228,7 +228,7 @@ if [[ -f $csv_file ]]; then
             echo "导入IP地址 $ip 失败"
             echo "导入IP地址 $ip 失败" >> informlog
         fi
-        sleep 3
+        sleep 1
        done
 else
     echo "CSV文件 $csv_file 不存在"
