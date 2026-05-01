@@ -1,38 +1,38 @@
 #!/bin/bash
 export LANG=en_US.UTF-8
-point=oppoint
-IP_ADDR=opv4v6
+point=443
+IP_ADDR=ipv4
 x_email=opmail
-hostname=opym
+hostname=(NO_name)
 zone_id=opcfid
 api_key=opcfkey
 pause=true
-clien=opcli
+clien=9
  
-CFST_URL_R="opspd"
+CFST_URL_R="-url https://е.eu.org/500.zip"
 
-CFST_N=opnum
+CFST_N=200
 
 CFST_T=4
 
-CFST_DN=opsnum
+CFST_DN=20
 
-CFST_TL=opup
+CFST_TL=9999
 
-CFST_TLL=opdo
+CFST_TLL=0
 
-CFST_SL=opsd
+CFST_SL=0
 
 telegramBotToken=optgken
 telegramBotUserId=optgid
 
-CFST_SPD=-dd
+CFST_SPD=""
 ymorip=1
 domain=opymyj
 subdomain=opymmc
 ymoryms=1
-token=oppushtk
-sleepTime=30
+token=
+sleepTime=25
 tgapi=api.telegram.org
 
 tgaction(){
@@ -89,7 +89,7 @@ for ((i=1; i<=$max_retries; i++)); do
         exit
     else
         echo "Cloudflare账号登陆失败，尝试重连 ($i/$max_retries)..."
-	sed -i '/api.cloudflare.com/d' /etc/hosts
+        sed -i '/api.cloudflare.com/d' /etc/hosts
         echo -e "104.18.12.137 api.cloudflare.com\n104.16.160.55 api.cloudflare.com\n104.16.96.55 api.cloudflare.com" >> /etc/hosts
         sleep 2
     fi
@@ -154,7 +154,6 @@ if [ $(awk -F, 'NR==2 {print $6}' /root/cfipopw/result.csv) == 0.00 ]; then
 awk -F, "NR<=$new_num" /root/cfipopw/result.csv > /root/cfipopw/new_result.csv
 mv /root/cfipopw/new_result.csv /root/cfipopw/result.csv
 fi
-
 sed -i '/api.cloudflare.com/d' /etc/hosts
 #goodip=$(awk -F ',' 'NR > 1 {print $1}' /root/cfipopw/result.csv | sed -n 1p)
 #echo "$goodip api.cloudflare.com" >> /etc/hosts
@@ -167,13 +166,13 @@ fi
 
 echo "测速完毕";
 if [ "$pause" = "false" ] ; then
-		echo "按要求未重启科学上网服务";
-		sleep 3;
+                echo "按要求未重启科学上网服务";
+                sleep 3;
 else
-		/etc/init.d/$CLIEN restart;
-		echo "已重启$CLIEN";
-		echo "请稍等$sleepTime秒";
-		sleep $sleepTime;
+                /etc/init.d/$CLIEN restart;
+                echo "已重启$CLIEN";
+                echo "请稍等$sleepTime秒";
+                sleep $sleepTime;
 fi
 
 ymonly(){
@@ -202,7 +201,7 @@ else
 fi
 csv_file='result.csv'
 if [[ -f $csv_file ]]; then
-    ips=$(awk -F ',' 'NR==1{if($1~/^[0-9]/)print $1; next} NR>1{print $1}' "$csv_file")
+    ips=$(awk -F ',' '{print $1}' "$csv_file")
     for ip in $ips; do
         url="https://api.cloudflare.com/client/v4/zones/$zone_id/dns_records"
         if [[ "$ip" =~ ":" ]]; then
@@ -214,7 +213,7 @@ if [[ -f $csv_file ]]; then
             "type": "'"$record_type"'",
             "name": "'"$subdomain.$domain"'",
             "content": "'"$ip"'",
-	    "ttl": 60,
+            "ttl": 60,
             "proxied": false
         }'
         response=$(curl -s -X POST "$url" -H "X-Auth-Email: $x_email" -H "X-Auth-Key: $api_key" -H "Content-Type: application/json" -d "$data")
@@ -291,4 +290,3 @@ echo
 echo "切记：在软路由-计划任务选项中，加入优选IP自动执行时间的cron表达式"
 echo "比如每天早上三点执行：0 3 * * * cd /root/cfipopw/ && bash cdnip.sh"
 echo
-exit
